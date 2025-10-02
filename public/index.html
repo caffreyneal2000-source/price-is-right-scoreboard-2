@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Price Is Right Scoreboard</title>
+  <style>
+    body { background: gold; color: red; font-family: Arial, sans-serif; text-align: center; }
+    h1 { font-size: 4em; margin-top: 50px; }
+    .score { font-size: 3em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Price Is Right Scoreboard</h1>
+  <div id="scores"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const scoresDiv = document.getElementById('scores');
+
+    socket.on('scoreUpdated', (data) => {
+      scoresDiv.innerHTML = '';
+      data.forEach(player => {
+        const p = document.createElement('div');
+        p.className = 'score';
+        p.textContent = player.name + ': $' + player.score;
+        scoresDiv.appendChild(p);
+      });
+    });
+  </script>
+</body>
+</html>

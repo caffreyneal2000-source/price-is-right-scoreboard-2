@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Control Panel</title>
+  <style>
+    body { background: #222; color: white; font-family: Arial, sans-serif; text-align: center; }
+    input, button { font-size: 1.2em; margin: 5px; padding: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Control Panel</h1>
+  <div>
+    <input id="name" placeholder="Name">
+    <input id="score" type="number" placeholder="Score">
+    <button onclick="updateScore()">Update</button>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    let players = [];
+
+    function updateScore() {
+      const name = document.getElementById('name').value;
+      const score = parseInt(document.getElementById('score').value);
+      const existing = players.find(p => p.name === name);
+      if (existing) {
+        existing.score = score;
+      } else {
+        players.push({ name, score });
+      }
+      socket.emit('updateScore', players);
+    }
+  </script>
+</body>
+</html>
