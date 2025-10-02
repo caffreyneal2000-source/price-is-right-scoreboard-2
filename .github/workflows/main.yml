@@ -1,0 +1,31 @@
+name: Build Scoreboard App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Package app
+        run: npx pkg server.js --targets node18-win-x64,node18-linux-x64 --output PriceIsRightScoreboard
+
+      - name: Upload executables
+        uses: actions/upload-artifact@v4
+        with:
+          name: scoreboard-binaries
+          path: |
+            PriceIsRightScoreboard-win.exe
+            PriceIsRightScoreboard-linux
